@@ -1,39 +1,40 @@
-# Medical Image Classification: Pneumonia Detection
+# Handwritten Digit Recognition using CNN (MNIST)
 ### Deep Learning Course Project
 
 ## 1. Problem Description
-This project focuses on classifying chest X-ray images into two categories: **Normal** and **Pneumonia**. The goal is to develop a Deep Learning model that can assist in medical diagnosis by automatically detecting signs of pneumonia from X-ray scans.
+This project implements a Deep Learning model for handwritten digit recognition using Convolutional Neural Networks (CNN). The objective is to classify grayscale handwritten digit images into 10 classes (0–9) to assist in automated digit recognition tasks.
 
 ## 2. Dataset
-- **Source**: [Chest X-Ray Images (Pneumonia) - Kaggle](https://www.kaggle.com/datasets/paultimothymooney/chest-xray-pneumonia)
-- **Size**: 5,863 images.
-- **Preprocessing**: Images were resized to 224x224 pixels and normalized (rescaled to [0, 1]).
+The project utilizes the widely used **MNIST** dataset.
+- **Source:** Automatically downloaded using `torchvision.datasets`.
+- **Details:** 60,000 training images and 10,000 testing images.
+- **Image Size:** 28 × 28 pixels (Grayscale).
 
-## 3. Model Architecture
-A Convolutional Neural Network (CNN) was implemented with the following architecture:
-- **Multiple Hidden Layers**: Conv2D and MaxPooling2D layers for feature extraction.
-- **Enhancement Techniques**: 
-    - **Batch Normalization**: Applied for faster training and stability.
-    - **Dropout**: Applied (0.5) to prevent overfitting.
-- **Output Layer**: Dense layer with Sigmoid activation for binary classification.
+## 3. Preprocessing
+The following preprocessing steps were applied to the images using PyTorch transforms:
+- Converted images to tensors using `ToTensor()`.
+- Normalized pixel values to the range [-1, 1] using `Normalize((0.5,), (0.5,))`.
 
-## 4. Experimentation & Results
-Two mandatory experiments were conducted by varying the **Optimizer** to compare performance:
+## 4. Model Architecture
+A custom Convolutional Neural Network (CNN) was built using `torch.nn.Module` with the following structure:
+- **Hidden Layers:** - Conv2D Layer (1 → 32 channels) + ReLU + MaxPooling2D
+  - Conv2D Layer (32 → 64 channels) + ReLU + MaxPooling2D
+  - Fully Connected (Dense) Layer (3136 → 128) + ReLU
+- **Enhancement Technique:** Added a **Dropout** layer (0.25) before the final output to prevent overfitting.
+- **Output Layer:** Fully Connected Layer (128 → 10 classes).
 
-| Experiment | Optimizer | Training Accuracy | Validation Accuracy | Final Loss |
+## 5. Experimentation & Results
+The model was trained for 5 epochs with a batch size of 64 using `CrossEntropyLoss`. Two mandatory experiments were conducted by varying the optimizer:
+
+| Model | Optimizer | Learning Rate | Final Accuracy | Final Loss |
 | :--- | :--- | :--- | :--- | :--- |
-| **Experiment 1** | **Adam** | ~96.7% | ~85.7% | 0.4195 |
-| **Experiment 2** | **SGD** | ~98.0% | ~64.0% | 2.7200 |
+| **Experiment 1** | **Adam** | 0.001 | 99.12% | 0.0272 |
+| **Experiment 2** | **SGD** | 0.010 | 97.97% | 0.0652 |
 
-### **Visualization**
-The project includes training vs. validation loss and accuracy curves for both experiments to monitor performance and convergence.
-
-## 5. Submission Requirements
-- **Source Code**: Provided in the `deeep.ipynb` file.
-- **Dataset**: Linked above.
-- **README**: Includes problem description, dataset link, results table, and instructions.
+**Conclusion:** The Adam optimizer converged faster and achieved a higher accuracy compared to SGD for this specific image classification task.
 
 ## 6. How to Run
-1. Download the `deeep.ipynb` file and open it in Google Colab.
-2. Upload your `kaggle.json` API key to the session storage.
-3. Run the cells sequentially to download the data and train the model.
+1. Open the provided `.ipynb` file in Google Colab or Jupyter Notebook.
+2. Ensure you have the required libraries installed:
+   ```bash
+   pip install torch torchvision matplotlib
